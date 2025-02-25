@@ -2,21 +2,27 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"os"
+
+	"github.com/Vkanhan/go-marathon/server"
+	"github.com/spf13/viper"
 )
 
 func main() {
+	config := viper.New()
+	config.SetConfigFile("server.toml")
+	if err := config.ReadInConfig(); err != nil {
+		log.Fatalf("Error reading config file: %v", err)
+	}
+
+	dbHandler := server.InitDatabase(config)
+	httpServer := server.InitHttpServer(config, dbHandler)
+
 	portString := os.Getenv("PORT")
 	if portString == "" {
 		portString = "8080"
 	}
-	server := &http.Server{
-		Addr:    ":" + portString,
-		Handler: nil,
-	}
+
 	log.Printf("Listening to port: %v", portString)
-	if err := server.ListenAndServe(); err != nil {
-		log.Fatal(err)
-	}
+	httpServer.Start()
 }

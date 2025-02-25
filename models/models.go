@@ -9,7 +9,7 @@ type Runner struct {
 	Country      string    `json:"country"`
 	PersonalBest string    `json:"personal_best,omitempty"`
 	SeasonBest   string    `json:"season_best,omitempty"`
-	Results      []*Result `json:"resuls,omitempty"`
+	Results      []*Result `json:"results,omitempty"`
 }
 
 type Result struct {
