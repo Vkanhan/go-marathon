@@ -26,3 +26,8 @@ func main() {
 	log.Printf("Listening to port: %v", portString)
 	httpServer.Start()
 }
+
+// Controller layer - entry point for data - accept and handle http requests and routing and authorization 
+// Service layer - business logic - how data will be created and changed - validation
+// Repository layer - prepare queries to be executed
+// Databaes layer - consist of database tech 

@@ -35,3 +35,4 @@ func InitDatabase(config *viper.Viper) *sql.DB {
 
 	return dbHandler
 }
+
