@@ -115,7 +115,7 @@ func (rr RunnersRepository) DeleteRunner(runnerID string) *models.ResponseError 
 	if rowsAffected == 0 {
 		return &models.ResponseError{
 			Message: "Runner not found",
-			Status:  http.StatusNotFound, 
+			Status:  http.StatusNotFound,
 		}
 	}
 

@@ -17,6 +17,7 @@ type HttpServer struct {
 	router            *gin.Engine
 	runnersController *controllers.RunnersController
 	resultsController *controllers.ResultsController
+	usersController   *controllers.UsersController
 }
 
 // InitHttpServer initializes and configures the HTTP server from lower layer to upward.
@@ -24,14 +25,17 @@ func InitHttpServer(config *viper.Viper, dbHandler *sql.DB) HttpServer {
 	// Initialize repositories
 	runnersRepository := repositories.NewRunnersRepository(dbHandler)
 	resultRepository := repositories.NewResultsRepository(dbHandler)
+	usersRepository := repositories.NewUsersRepository(dbHandler)
 
 	// Initialize services
 	runnersService := services.NewRunnersService(runnersRepository, resultRepository)
 	resultsService := services.NewResultsService(resultRepository, runnersRepository)
+	usersService := services.NewUsersService(usersRepository)
 
 	// Initialize controllers
-	runnersController := controllers.NewRunnerController(runnersService)
-	resultsController := controllers.NewResultsController(resultsService)
+	runnersController := controllers.NewRunnersController(runnersService, usersService)
+	resultsController := controllers.NewResultsController(resultsService, usersService)
+	usersController := controllers.NewUsersController(usersService)
 
 	router := gin.Default()
 
@@ -43,12 +47,15 @@ func InitHttpServer(config *viper.Viper, dbHandler *sql.DB) HttpServer {
 
 	router.POST("/result", resultsController.CreateResult)
 	router.DELETE("/result/:id", resultsController.DeleteResult)
+	router.POST("/login", usersController.Login)
+	router.POST("logout", usersController.Logout)
 
 	return HttpServer{
 		config:            config,
 		router:            router,
 		runnersController: runnersController,
 		resultsController: resultsController,
+		usersController:   usersController,
 	}
 }
 

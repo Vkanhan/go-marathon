@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/spf13/viper"
 	_ "github.com/lib/pq"
+	"github.com/spf13/viper"
 )
 
 // InitDatabase initializes the database connection using configuration values
@@ -38,4 +38,3 @@ func InitDatabase(config *viper.Viper) *sql.DB {
 
 	return dbHandler
 }
-

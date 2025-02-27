@@ -10,14 +10,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const ADMIN_ROLE = "admin"
+const RUNNER_ROLE = "runner"
+
 // ResultsController manages result-related requests.
 type ResultsController struct {
 	resultsService *services.ResultsService
+	usersService   *services.UsersService
 }
 
-func NewResultsController(resultsService *services.ResultsService) *ResultsController {
+func NewResultsController(resultsService *services.ResultsService, usersService *services.UsersService) *ResultsController {
 	return &ResultsController{
 		resultsService: resultsService,
+		usersService:   usersService,
 	}
 }
 

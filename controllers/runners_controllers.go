@@ -12,11 +12,13 @@ import (
 
 type RunnersController struct {
 	runnersService *services.RunnersService
+	usersService   *services.UsersService
 }
 
-func NewRunnerController(runnerServices *services.RunnersService) *RunnersController {
+func NewRunnersController(runnersService *services.RunnersService, usersService *services.UsersService) *RunnersController {
 	return &RunnersController{
-		runnersService: runnerServices,
+		runnersService: runnersService,
+		usersService:   usersService,
 	}
 }
 
@@ -75,6 +77,17 @@ func (rh *RunnersController) DeleteRunner(ctx *gin.Context) {
 
 // GetRunner handles retrieving a runner by ID.
 func (rh *RunnersController) GetRunner(ctx *gin.Context) {
+	accessToken := ctx.Request.Header.Get("Token")
+	auth, responseErr := rh.usersService.AuthorizeUser(accessToken, []string{ADMIN_ROLE, RUNNER_ROLE})
+	if responseErr != nil {
+		ctx.JSON(responseErr.Status, responseErr)
+		return
+	}
+	if !auth {
+		ctx.Status(http.StatusUnauthorized)
+		return
+	}
+
 	runnerID := ctx.Param("id")
 	response, responseErr := rh.runnersService.GetRunner(runnerID)
 	if responseErr != nil {
@@ -86,6 +99,16 @@ func (rh *RunnersController) GetRunner(ctx *gin.Context) {
 
 // GetRunnersBatch handles retrieving a batch of runners.
 func (rh *RunnersController) GetRunnersBatch(ctx *gin.Context) {
+	accessToken := ctx.Request.Header.Get("Token")
+	auth, responseErr := rh.usersService.AuthorizeUser(accessToken, []string{ADMIN_ROLE, RUNNER_ROLE})
+	if responseErr != nil {
+		ctx.JSON(responseErr.Status, responseErr)
+		return
+	}
+	if !auth {
+		ctx.Status(http.StatusUnauthorized)
+		return
+	}
 	params := ctx.Request.URL.Query()
 	country := params.Get("country")
 	year := params.Get("year")
