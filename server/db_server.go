@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/spf13/viper"
+	_ "github.com/lib/pq"
 )
 
 // InitDatabase initializes the database connection using configuration values
