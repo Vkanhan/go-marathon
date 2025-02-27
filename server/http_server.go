@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// HttpServer represents the structure for the HTTP server
 type HttpServer struct {
 	config            *viper.Viper
 	router            *gin.Engine
@@ -18,14 +19,17 @@ type HttpServer struct {
 	resultsController *controllers.ResultsController
 }
 
-// InitHttpServer initializes and configures the HTTP server.
+// InitHttpServer initializes and configures the HTTP server from lower layer to upward.
 func InitHttpServer(config *viper.Viper, dbHandler *sql.DB) HttpServer {
+	// Initialize repositories
 	runnersRepository := repositories.NewRunnersRepository(dbHandler)
 	resultRepository := repositories.NewResultsRepository(dbHandler)
 
+	// Initialize services
 	runnersService := services.NewRunnersService(runnersRepository, resultRepository)
 	resultsService := services.NewResultsService(resultRepository, runnersRepository)
 
+	// Initialize controllers
 	runnersController := controllers.NewRunnerController(runnersService)
 	resultsController := controllers.NewResultsController(resultsService)
 
@@ -48,6 +52,7 @@ func InitHttpServer(config *viper.Viper, dbHandler *sql.DB) HttpServer {
 	}
 }
 
+// Start runs the HTTP server using the configured address
 func (hs *HttpServer) Start() {
 	err := hs.router.Run(hs.config.GetString("http.server_address"))
 	if err != nil {

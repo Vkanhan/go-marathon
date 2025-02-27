@@ -9,6 +9,7 @@ import (
 	"github.com/Vkanhan/go-marathon/repositories"
 )
 
+// RunnersService handles operations related to runners
 type RunnersService struct {
 	runnersRepository *repositories.RunnersRepository
 	resultsRepository *repositories.ResultsRepository

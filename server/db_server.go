@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// InitDatabase initializes the database connection using configuration values
 func InitDatabase(config *viper.Viper) *sql.DB {
 	connectionString := config.GetString("database.connection_string")
 	maxIdleConnections := config.GetInt("database.max_idle_connections")
@@ -23,6 +24,7 @@ func InitDatabase(config *viper.Viper) *sql.DB {
 		log.Fatalf("Error while initializing database: %v", err)
 	}
 
+	// Configure connection pooling
 	dbHandler.SetMaxIdleConns(maxIdleConnections)
 	dbHandler.SetMaxOpenConns(maxOpenConnections)
 	dbHandler.SetConnMaxLifetime(connectionMaxLifetime)

@@ -7,6 +7,7 @@ import (
 	"github.com/Vkanhan/go-marathon/models"
 )
 
+// ResultsRepository handles database operations for results.
 type ResultsRepository struct {
 	dbHandler   *sql.DB
 	transaction *sql.Tx

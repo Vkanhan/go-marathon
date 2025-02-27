@@ -5,6 +5,7 @@ import (
 	"database/sql"
 )
 
+// BeginTransaction starts a database transaction for both repositories
 func BeginTransaction(runnersRepository *RunnersRepository,
 	resultsRepository *ResultsRepository) error {
 	ctx := context.Background()
@@ -18,6 +19,7 @@ func BeginTransaction(runnersRepository *RunnersRepository,
 	return nil
 }
 
+// RollbackTransaction reverts the changes made during the transaction
 func RollbackTransaction(runnersRepository *RunnersRepository,
 	resultsRepository *ResultsRepository) error {
 	transaction := runnersRepository.transaction
@@ -26,6 +28,7 @@ func RollbackTransaction(runnersRepository *RunnersRepository,
 	return transaction.Rollback()
 }
 
+// CommitTransaction saves the changes made during the transaction
 func CommitTransaction(runnersRepository *RunnersRepository,
 	resultsRepository *ResultsRepository) error {
 	transaction := runnersRepository.transaction

@@ -7,6 +7,7 @@ import (
 	"github.com/Vkanhan/go-marathon/models"
 )
 
+// RunnersRepository handles database operations for the runners table
 type RunnersRepository struct {
 	dbHandler   *sql.DB
 	transaction *sql.Tx
@@ -114,7 +115,7 @@ func (rr RunnersRepository) DeleteRunner(runnerID string) *models.ResponseError 
 	if rowsAffected == 0 {
 		return &models.ResponseError{
 			Message: "Runner not found",
-			Status:  http.StatusNotFound, // Correct status code
+			Status:  http.StatusNotFound, 
 		}
 	}
 

@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// InitConfig lets viper read the config from the toml file
 func InitConfig(fileName string) *viper.Viper {
 	config := viper.New()
 	config.SetConfigName(fileName)

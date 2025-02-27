@@ -8,6 +8,7 @@ import (
 	"github.com/Vkanhan/go-marathon/repositories"
 )
 
+// ResultsService handles logic related to race results
 type ResultsService struct {
 	resultsRepository *repositories.ResultsRepository
 	runnersRepository *repositories.RunnersRepository
@@ -20,6 +21,7 @@ func NewResultsService(resultsRepository *repositories.ResultsRepository, runner
 	}
 }
 
+// CreateResult validates and stores a new race result
 func (rs ResultsService) CreateResult(result *models.Result) (*models.Result, *models.ResponseError) {
 	if result.RunnerID == "" {
 		return nil, &models.ResponseError{
@@ -87,7 +89,7 @@ func (rs ResultsService) CreateResult(result *models.Result) (*models.Result, *m
 			runner.PersonalBest = result.RaceResult
 		}
 	}
-	// Update runner’s season-best
+	// Update runners season-best
 	if result.Year == currentYear {
 		if runner.SeasonBest == "" {
 			runner.SeasonBest = result.RaceResult
@@ -169,6 +171,7 @@ func (rs ResultsService) DeleteResult(resultId string) *models.ResponseError {
 	return nil
 }
 
+// parseRaceResult converts a race time string to a time.Duration
 func parseRaceResult(timeString string) (time.Duration, error) {
 	return time.ParseDuration(
 		timeString[0:2] + "h" +

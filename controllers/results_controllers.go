@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ResultsController manages result-related requests.
 type ResultsController struct {
 	resultsService *services.ResultsService
 }
