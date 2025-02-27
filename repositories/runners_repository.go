@@ -219,7 +219,7 @@ func (rr RunnersRepository) GetAllRunners() ([]*models.Runner, *models.ResponseE
 
 func (rr RunnersRepository) GetRunnersByCountry(country string) ([]*models.Runner, *models.ResponseError) {
 	query := `
-		SELECT * 
+		SELECT id, first_name, last_name, age, personal_best, season_best
 		FROM runners 
 		WHERE country = $1 AND is_active = true 
 		ORDER BY personal_best 
