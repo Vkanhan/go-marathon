@@ -1,4 +1,4 @@
--- Enable necessary extension for UUIDs
+-- Enable necessary extension for generating UUIDs
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- Create runners table
