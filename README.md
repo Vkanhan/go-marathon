@@ -105,7 +105,7 @@ go run .
 
 ## Example Requests
 
-1. Create a Runner
+1.Create a Runner
 
 ```bash
 curl -X POST http://localhost:8080/runner \
@@ -117,3 +117,56 @@ curl -X POST http://localhost:8080/runner \
         "country": "USA"
       }'
 ```
+
+2.Update a Runner
+
+```bash
+curl -X PUT http://localhost:8080/runner \
+-H "Content-Type: application/json" \
+-d '{
+    "id": "some-uuid",
+    "first_name": "John",
+    "last_name": "Smith",
+    "age": 31,
+    "country": "Canada"
+}'
+```
+
+3.Delete a Runner
+
+```bash
+curl -X DELETE http://localhost:8080/runner/some-uuid
+```
+
+4.Get a Runner By ID
+
+```bash
+curl -X GET http://localhost:8080/runner/some-uuid
+```
+
+5.Get a batch of Runners
+
+```bash
+curl -X GET http://localhost:8080/runner
+```
+
+6.Create a Result
+
+```bash
+curl -X POST http://localhost:8080/result \
+-H "Content-Type: application/json" \
+-d '{
+    "runner_id": "some-uuid",
+    "race_result": "2h30m45s",
+    "location": "New York",
+    "position": 1,
+    "year": 2023
+}'
+```
+
+7.Delete a Result
+
+```bash
+curl -X DELETE http://localhost:8080/result/result-uuid
+```
+
