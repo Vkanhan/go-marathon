@@ -47,6 +47,7 @@ func InitHttpServer(config *viper.Viper, dbHandler *sql.DB) HttpServer {
 
 	router.POST("/result", resultsController.CreateResult)
 	router.DELETE("/result/:id", resultsController.DeleteResult)
+
 	router.POST("/login", usersController.Login)
 	router.POST("logout", usersController.Logout)
 

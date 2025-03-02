@@ -27,6 +27,17 @@ func NewResultsController(resultsService *services.ResultsService, usersService 
 }
 
 func (rh *ResultsController) CreateResult(ctx *gin.Context) {
+	accessToken := ctx.Request.Header.Get("Token")
+	auth, responseErr := rh.usersService.AuthorizeUser(accessToken, []string{ADMIN_ROLE})
+	if responseErr != nil {
+		ctx.JSON(responseErr.Status, responseErr)
+		return
+	}
+	if !auth {
+		ctx.Status(http.StatusUnauthorized)
+		return
+	}
+
 	body, err := io.ReadAll(ctx.Request.Body)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
@@ -46,8 +57,19 @@ func (rh *ResultsController) CreateResult(ctx *gin.Context) {
 }
 
 func (rh *ResultsController) DeleteResult(ctx *gin.Context) {
+	accessToken := ctx.Request.Header.Get("Token")
+	auth, responseErr := rh.usersService.AuthorizeUser(accessToken, []string{ADMIN_ROLE})
+	if responseErr != nil {
+		ctx.JSON(responseErr.Status, responseErr)
+		return
+	}
+	if !auth {
+		ctx.Status(http.StatusUnauthorized)
+		return
+	}
+
 	resultID := ctx.Param("id")
-	responseErr := rh.resultsService.DeleteResult(resultID)
+	responseErr = rh.resultsService.DeleteResult(resultID)
 	if responseErr != nil {
 		ctx.JSON(responseErr.Status, responseErr)
 		return

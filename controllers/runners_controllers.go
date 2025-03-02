@@ -24,6 +24,18 @@ func NewRunnersController(runnersService *services.RunnersService, usersService 
 
 // CreateRunner handles the creation of a new runner.
 func (rh *RunnersController) CreateRunner(ctx *gin.Context) {
+	// Authentication and authorization check
+	accessToken := ctx.Request.Header.Get("Token")
+	auth, responseErr := rh.usersService.AuthorizeUser(accessToken, []string{ADMIN_ROLE})
+	if responseErr != nil {
+		ctx.JSON(responseErr.Status, responseErr)
+		return
+	}
+	if !auth {
+		ctx.Status(http.StatusUnauthorized)
+		return
+	}
+
 	body, err := io.ReadAll(ctx.Request.Body)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
@@ -45,6 +57,17 @@ func (rh *RunnersController) CreateRunner(ctx *gin.Context) {
 
 // UpdateRunner handles the update of an existing runner.
 func (rh *RunnersController) UpdateRunner(ctx *gin.Context) {
+	accessToken := ctx.Request.Header.Get("Token")
+	auth, responseErr := rh.usersService.AuthorizeUser(accessToken, []string{ADMIN_ROLE})
+	if responseErr != nil {
+		ctx.JSON(responseErr.Status, responseErr)
+		return
+	}
+	if !auth {
+		ctx.Status(http.StatusUnauthorized)
+		return
+	}
+
 	body, err := io.ReadAll(ctx.Request.Body)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
@@ -55,7 +78,7 @@ func (rh *RunnersController) UpdateRunner(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
-	responseErr := rh.runnersService.UpdateRunner(&runner)
+	responseErr = rh.runnersService.UpdateRunner(&runner)
 	if responseErr != nil {
 		ctx.AbortWithStatusJSON(responseErr.Status, responseErr)
 		return
@@ -64,10 +87,21 @@ func (rh *RunnersController) UpdateRunner(ctx *gin.Context) {
 
 }
 
-// DeleteRunner handles the deletion of a runner by ID.
+// DeleteRunner handles the deletion of a runner by ID.2
 func (rh *RunnersController) DeleteRunner(ctx *gin.Context) {
+	accessToken := ctx.Request.Header.Get("Token")
+	auth, responseErr := rh.usersService.AuthorizeUser(accessToken, []string{ADMIN_ROLE})
+	if responseErr != nil {
+		ctx.JSON(responseErr.Status, responseErr)
+		return
+	}
+	if !auth {
+		ctx.Status(http.StatusUnauthorized)
+		return
+	}
+
 	runnerID := ctx.Param("id")
-	responseErr := rh.runnersService.DeleteRunner(runnerID)
+	responseErr = rh.runnersService.DeleteRunner(runnerID)
 	if responseErr != nil {
 		ctx.AbortWithStatusJSON(responseErr.Status, responseErr)
 		return
